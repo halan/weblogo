@@ -22,10 +22,11 @@
     this.player.context.translate(this.player.context.canvas.width/2,
                                   this.player.context.canvas.height/2);
 
+    this.img = new Image();
+    this.img.src = 'tuguita.png';
 
     this.width = this.context.canvas.width;
     this.height = this.context.canvas.height;
-    this.pen = 1;
     this.angle = 0;
 
     this.restartpos();
@@ -35,17 +36,12 @@
   {
     Turtle.angle += r;
     var context = this.player.context;
-    img = new Image();
-    img.src = 'tuguita.png';
-    img.onload = function()
-    {
-       context.clearRect( -context.canvas.width/2,
-                         -context.canvas.height/2,
-                         context.canvas.width,
-                         context.canvas.height);
-       context.rotate(r * Math.PI / 180);
-       context.drawImage(img, -(img.width/2), -(img.height/2), img.width, img.height);
-    }
+    context.clearRect( -context.canvas.width/2,
+                       -context.canvas.height/2,
+                       context.canvas.width,
+                       context.canvas.height);
+    context.rotate(r * Math.PI / 180);
+    context.drawImage(this.img, -(this.img.width/2), -(this.img.height/2), this.img.width, this.img.height);
   }
 
   Turtle.eraseall = function()
@@ -57,7 +53,7 @@
   {
     this.x = this.width / 2;
     this.y = this.height / 2;
-
+    this.pen = 1;
     this.player.css({top: this.x-(this.player.context.canvas.height/2),
                      left: this.y-(this.player.context.canvas.width/2)});
     this.rotate(-this.angle);
@@ -145,7 +141,29 @@
 <canvas id="place" width="500" height="500"></canvas>
 </div>
 
-<textarea id="thecode" style="width:200px; height:200px;">
+<textarea id="thecode" style="width:300px; height:300px;">
+home
+clear
+
+learn geometric $tam, $sides
+[
+  repeat $sides
+  [
+    forward $tam
+    turnleft 360/$sides
+  ]
+]
+
+geometric 30, 5
+penup
+forward 100
+pendown
+geometric 30, 3
+penup
+backward 200
+pendown
+geometric 1, 360
+
 </textarea><button id="exec" />
 
 </form>
