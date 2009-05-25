@@ -1,5 +1,3 @@
-//LOGO Parser
-
 [*
 
 
@@ -494,7 +492,7 @@ ops[OP_FORWARD] = function(node) {
 	var val = execute( node.children[0] );
 
   if( val.type == T_INT || val.type == T_FLOAT  )
-				Turtle.logo.forward( val.value );
+				Turtle.logo.forward( parseInt(val.value) );
 };
 
 // OP_BACKWARD
@@ -502,7 +500,7 @@ ops[OP_BACKWARD] = function(node) {
 	var val = execute( node.children[0] );
 
   if( val.type == T_INT || val.type == T_FLOAT  )
-				Turtle.logo.backward( val.value );
+				Turtle.logo.backward( parseInt(val.value) );
 };
 
 // OP_TURNLEFT
@@ -510,7 +508,7 @@ ops[OP_TURNLEFT] = function(node) {
 	var val = execute( node.children[0] );
 
   if( val.type == T_INT || val.type == T_FLOAT  )
-				Turtle.logo.left( val.value );
+				Turtle.logo.left( parseInt(val.value) );
 };
 
 // OP_TURNRIGHT
@@ -518,7 +516,7 @@ ops[OP_TURNRIGHT] = function(node) {
 	var val = execute( node.children[0] );
 
   if( val.type == T_INT || val.type == T_FLOAT  )
-				Turtle.logo.right( val.value );
+				Turtle.logo.right( parseInt(val.value) );
 };
 
 // OP_PENUP
@@ -741,6 +739,8 @@ ops[OP_ADD] = function(node) {
 	switch (leftChild.type) {
 		// TODO: Check for PHP-standard.
 		case T_INT:
+      leftValue = parseInt(leftChild.value);
+      break;
 		case T_CONST:
 			leftValue = leftChild.value;
       type = T_CONST;
@@ -753,6 +753,8 @@ ops[OP_ADD] = function(node) {
 	switch (rightChild.type) {
 		// TODO: Check for PHP-standard.
 		case T_INT:
+      rightValue = parseInt(rightChild.value);
+      break;
 		case T_CONST:
 			rightValue = rightChild.value;
       type = T_CONST;
@@ -1090,6 +1092,7 @@ LOGONatives:
     FORWARD Expression                                          [* %% = createNode( NODE_OP, OP_FORWARD, %2 ); *]
    | BACKWARD Expression                                          [* %% = createNode( NODE_OP, OP_BACKWARD, %2 ); *]
    | TURNLEFT Expression                                          [* %% = createNode( NODE_OP, OP_TURNLEFT, %2 ); *]
+   | TURNRIGHT Expression                                         [* %% = createNode( NODE_OP, OP_TURNRIGHT, %2); *]
    | PENUP                                           [* %% = createNode( NODE_OP, OP_PENUP ); *]
    | PENDOWN                                          [* %% = createNode( NODE_OP, OP_PENDOWN ); *]
    | CLEAR                                          [* %% = createNode( NODE_OP, OP_CLEAR ); *]

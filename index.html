@@ -1,5 +1,7 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://wilq32.googlepages.com/jQueryRotate.js"></script>
 <script>
+
 
   log = function(v)
   {
@@ -9,15 +11,40 @@
 
   Turtle = new Object();
 
+  Turtle.player = new Image();
+
   Turtle.init = function(objid)
   {
-    this.context = document.getElementById(objid).getContext("2d");
+    this.context = $(objid).get(0).getContext("2d");
+
+    this.player = $('#player');
+    this.player.context = this.player.get(0).getContext('2d');
+    this.player.context.translate(this.player.context.canvas.width/2,
+                                  this.player.context.canvas.height/2);
+
 
     this.width = this.context.canvas.width;
     this.height = this.context.canvas.height;
     this.pen = 1;
     this.restartpos();
   };
+
+  Turtle.rotate = function(r)
+  {
+    Turtle.angle += r;
+    var context = this.player.context;
+    img = new Image();
+    img.src = 'tuguita.png';
+    img.onload = function()
+    {
+       context.clearRect( -context.canvas.width/2,
+                         -context.canvas.height/2,
+                         context.canvas.width,
+                         context.canvas.height);
+       context.rotate(r * Math.PI / 180);
+       context.drawImage(img, -(img.width/2), -(img.height/2), img.width, img.height);
+    }
+  }
 
   Turtle.eraseall = function()
   {
@@ -27,8 +54,12 @@
   Turtle.restartpos = function()
   {
     this.x = this.width / 2;
-    this.y = this.height / 2 ;
+    this.y = this.height / 2;
     this.angle = 0;
+
+    this.player.css({top: this.x-(this.player.context.canvas.height/2),
+                     left: this.y-(this.player.context.canvas.width/2)});
+    this.rotate(0);
   };
 
   Turtle.walk = function(v)
@@ -37,7 +68,7 @@
     xdir = Math.sin(rad) * parseFloat(v)
     ydir = Math.cos(rad) * parseFloat(v)
 
-    this.moveTo(this.x + xdir, this.y + ydir);
+    this.moveTo(this.x + xdir, this.y - ydir);
   };
 
   Turtle.moveTo = function(x,y)
@@ -49,7 +80,10 @@
       this.context.lineTo(x, y)
       this.context.stroke()
     } 
-    this.x = x; this.y = y
+    this.x = x; this.y = y;
+
+    this.player.css({top: this.y-this.player.context.canvas.height/2,
+                    left: this.x-this.player.context.canvas.width/2});
   };
 
   Turtle.logo = new Object();
@@ -60,10 +94,10 @@
   { Turtle.walk(-v); };
 
    Turtle.logo.right = function(v)
-  { Turtle.angle += v; };
+   { Turtle.rotate(v);};
 
    Turtle.logo.left = function(v)
-  { Turtle.angle -= v; };
+   { Turtle.rotate(-v); };
 
   Turtle.logo.pendown = function()
   { Turtle.pen = 1; };
@@ -82,7 +116,7 @@
 
   $(function()
   {
-    Turtle.init('place');
+    Turtle.init('#place');
     
     $('#exec').click(function()
     {
@@ -92,7 +126,23 @@
 
 </script>
 
-<canvas id="place" width="500" height="500" style="border: 1px solid;"></canvas>
+<style>
+
+  #cont{width: 500px;
+        height: 500px;
+        background: #ddd;
+        border: 1px solid gray;
+        position: relative;
+        float: left;
+        overflow: hide;}
+  #player{position: absolute; top: 0; }
+
+</style>
+
+<div id="cont">
+<canvas id="player" width="32" height="32"></canvas>
+<canvas id="place" width="500" height="500"></canvas>
+</div>
 
 <textarea id="thecode" style="width:200px; height:200px;">
 </textarea><button id="exec" />
