@@ -949,7 +949,7 @@ function execute( node ) {
 }
 *]
 
-!	' |\n|\r|\t'
+!	' |\n|\r|\t|#[^\n]*'
 
 	"IF"
 	"ELSE"
